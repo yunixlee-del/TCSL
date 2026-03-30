@@ -54,23 +54,15 @@
         
         /* 重点：奖学金标题突出 */
         .sch-title { 
-            font-size: 32px; /* 增大字体 */
-            font-weight: 900; 
-            color: var(--primary-color); 
-            margin-bottom: 20px; 
-            padding: 10px 20px;
-            background: rgba(0, 90, 90, 0.05); /* 淡淡的底色 */
-            display: inline-block;
-            border-radius: 10px;
+            font-size: 32px; font-weight: 900; color: var(--primary-color); margin-bottom: 20px;
+            padding: 10px 20px; background: rgba(0, 90, 90, 0.05); display: inline-block; border-radius: 10px;
         }
 
         /* 重点：卓越奖学金专属高亮 */
         .highlight-card { border: 4px solid var(--highlight-orange); background: #fffdfb; }
         .highlight-card .sch-title { 
-            color: var(--highlight-orange); 
-            background: rgba(255, 107, 0, 0.1);
-            font-size: 36px;
-            text-transform: uppercase;
+            color: var(--highlight-orange); background: rgba(255, 107, 0, 0.1);
+            font-size: 36px; text-transform: uppercase;
         }
         .big-text { font-size: 40px; font-weight: 900; color: var(--highlight-orange); display: block; margin: 20px 0; letter-spacing: 1px; }
 
@@ -86,7 +78,7 @@
 <div class="container">
     <header>
         <div class="university-name">新纪元大学学院 | NEW ERA UNIVERSITY COLLEGE</div>
-	<div class="faculty-name">国际教育学院 | Institute of International Education</div>
+	    <div class="faculty-name">国际教育学院 | Institute of International Education</div>
         <div class="dept-name">汉语国际教育系 | Department of Teaching Chinese as a Second Language</div>
     </header>
 
@@ -98,6 +90,7 @@
             <button class="path-btn" onclick="showPath('path3', this)">STPM / Foundation / Diploma (CGPA 2.00)</button>
             <button class="path-btn" onclick="showPath('path4', this)">UEC 5 credits</button>
         </div>
+    
         <div id="pathway" class="pathway-display">
             <div id="steps" class="step-container"></div>
         </div>
@@ -126,20 +119,21 @@
                 <div class="career-opt" onclick="updateCareer(7, this)">7. 成为语音、语言专才</div>
             </div>
             <div class="career-viewer">
-                <img src="Picture1.jpg" id="career-img" class="career-img">
+                <img src="Picture1.jpg" id="career-img" class="career-img" alt="Career Prospect">
                 <div id="career-title" style="font-size:24px; font-weight:bold; color:var(--primary-color); margin-bottom:10px;">从事华文教育工作</div>
                 <div id="career-desc" style="font-size:18px; color:#d9534f; font-weight:bold;">通过SPP的面试，成为正式国中华文老师</div>
             </div>
-        </div>
+         </div>
     </section>
 
     <section>
         <h2 class="section-title">4. 奖学金方案查询</h2>
         <div class="sch-container">
-            <p style="text-align: center; font-weight: bold; font-size: 18px;">请选择你的成绩</p>
+            <p style="text-align: center; font-weight: bold; font-size: 18px;">请选择你的成绩或类别</p>
             <div class="selector-group">
                 <button class="path-btn" onclick="selectLevel('spm', this)">SPM / O level / IGCSE</button>
                 <button class="path-btn" onclick="selectLevel('stpm', this)">STPM / UEC / Diploma</button>
+                <button class="path-btn" onclick="selectLevel('talent', this)">才艺、运动及其他优惠</button>
             </div>
 
             <div id="opts-spm" class="sub-selector">
@@ -157,6 +151,18 @@
                     <button class="path-btn" onclick="showResult('uec7a')">UEC 7As</button>
                     <button class="path-btn" onclick="showResult('stpm3b')">STPM / A level 3Bs</button>
                     <button class="path-btn" onclick="showResult('uec5')">UEC 5门课 15分以下</button>
+                </div>
+            </div>
+            
+            <div id="opts-talent" class="sub-selector">
+                <div class="selector-group">
+                    <button class="path-btn" onclick="showResult('tal_special')">特长生优惠</button>
+                    <button class="path-btn" onclick="showResult('tal_leader')">学生领袖领导力奖</button>
+                    <button class="path-btn" onclick="showResult('tal_sports')">体育生奖学金</button>
+                    <button class="path-btn" onclick="showResult('tal_multi')">多元文化奖学金</button>
+                    <button class="path-btn" onclick="showResult('tal_principal')">中学校长推荐奖学金</button>
+                    <button class="path-btn" onclick="showResult('tal_family')">兄弟姐妹/教师子女优惠</button>
+                    <button class="path-btn" onclick="showResult('tal_new')">新生入学优惠</button>
                 </div>
             </div>
 
@@ -207,11 +213,16 @@
 
     // 奖学金查询
     function selectLevel(lvl, btn) {
+        // 隐藏所有子菜单
         document.getElementById('opts-spm').style.display = 'none';
         document.getElementById('opts-stpm').style.display = 'none';
+        document.getElementById('opts-talent').style.display = 'none'; 
         document.getElementById('result-box').style.display = 'none';
+        
         btn.parentElement.querySelectorAll('.path-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        
+        // 显示选中的子菜单
         document.getElementById('opts-' + lvl).style.display = 'block';
     }
 
@@ -219,14 +230,57 @@
         const box = document.getElementById('result-box');
         box.style.display = 'block';
         const data = {
+            // --- SPM 奖学金 ---
             'spm16': { title: '1A-6A 学费减免', benefit: '• 6A: 减免 RM4500/年<br>• 4A-5A: 减免 RM4000/年<br>• 1A-3A: 减免 RM3500/年', cond: 'SPM/O level/ IGCSE 1-6As' },
             'spm7': { title: '7A 学优生奖学金', benefit: 'Diploma 第一年学费减免 RM6000<br>CGPA 3.75-4.0: 自动续领<br>CGPA 2.0-3.74: 减免 RM1500/学期', cond: 'SPM/O level/ IGCSE 7As' },
             'spm8': { title: '8A 学优生奖学金', benefit: 'Diploma 第一年学费全免<br>CGPA 3.75-4.0: 自动续领<br>CGPA 3.0-3.74: 减免 RM2000/学期', cond: 'SPM/O level/ IGCSE 8As' },
             'spm9': { title: '卓越学术表现奖学金', isHi: true, benefit: '<span class="big-text">100% 学费、杂费、住宿费全免</span>', cond: 'SPM/O level/ IGCSE 9As及以上', extra: 'CGPA 2.0或以上自动续领奖学金' },
+            
+            // --- STPM/UEC 奖学金 ---
             'stpm3a': { title: '卓越学术表现奖学金', isHi: true, benefit: '<span class="big-text">100% 学费、杂费、住宿费全免</span>', cond: 'STPM / A level 3As', extra: 'CGPA 2.0或以上自动续领奖学金' },
             'uec7a': { title: '卓越学术表现奖学金', isHi: true, benefit: '<span class="big-text">100% 学费、杂费、住宿费全免</span>', cond: 'UEC 7As', extra: 'CGPA 2.0或以上自动续领奖学金' },
             'stpm3b': { title: 'Degree 学优生奖学金', benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">总学费减免高达 RM30000</span><br>(RM5000/学期)', cond: 'STPM / A level 3Bs', extra: 'CGPA 2.0或以上自动续领奖学金' },
-            'uec5': { title: 'Degree 学优生奖学金', benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">总学费减免高达 RM30000</span><br>(RM5000/学期)', cond: 'UEC 5门课绩点15分及以下', extra: 'CGPA 2.0或以上自动续领奖学金' }
+            'uec5': { title: 'Degree 学优生奖学金', benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">总学费减免高达 RM30000</span><br>(RM5000/学期)', cond: 'UEC 5门课绩点15分及以下', extra: 'CGPA 2.0或以上自动续领奖学金' },
+            
+            // --- 新增：才艺、运动及其他优惠 ---
+            'tal_special': { 
+                title: '特长生优惠', 
+                benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">学费减免 RM5000</span>', 
+                cond: '曾参与校际比赛或演出（才艺、运动）' 
+            },
+            'tal_leader': { 
+                title: '学生领袖领导力奖', 
+                benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">学费减免 RM3000</span>', 
+                cond: '高中时期在同一社团连续两年担任主席或副主席' 
+            },
+            'tal_sports': { 
+                title: '体育生奖学金', 
+                benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">学费减免高达 RM30000</span>', 
+                cond: '曾代表中学参加州级、全国任何体育运动项目比赛', 
+                extra: 'CGPA 2.00或以上自动续领' 
+            },
+            'tal_multi': { 
+                title: '多元文化奖学金', 
+                benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">学费减免高达 RM30000</span>', 
+                cond: '非华裔学生', 
+                extra: 'CGPA 2.00或以上自动续领' 
+            },
+            'tal_principal': { 
+                title: '中学校长推荐奖学金', 
+                benefit: '<div style="text-align:center; display:inline-block; margin-top:10px; font-size:18px; line-height:1.8;">• <b>Diploma:</b> 学费减免 RM12000 - RM15000<br>• <b>Bachelor:</b> 减免PTPTN Scheme获批后的学费余额</div>', 
+                cond: '需要财务援助者获独中、华中、国中校长推荐报读 Diploma 或 Bachelor 课程', 
+                extra: 'CGPA 2.00或以上自动续领' 
+            },
+            'tal_family': { 
+                title: '兄弟姐妹 / 中小学教师子女优惠', 
+                benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">10% 学费减免</span>', 
+                cond: '兄弟姐妹 / 中小学教师子女报读新纪元' 
+            },
+            'tal_new': { 
+                title: '新生入学优惠', 
+                benefit: '<span style="color:#005a5a; font-size:26px; font-weight:900;">学费减免 RM3000</span>', 
+                cond: '报读新纪元即可享有优惠' 
+            }
         };
         const d = data[code];
         box.className = 'sch-result' + (d.isHi ? ' highlight-card' : '');
